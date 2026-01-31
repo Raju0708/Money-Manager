@@ -1,24 +1,26 @@
+// backend/server.js
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
-
 import transactionRoutes from "./routes/transactionRoutes.js";
-import accountRoutes from "./routes/accountRoutes.js";
 
-const app = express(); // ✅ MUST be before app.use
+const app = express();
 
-app.use(cors());
+// Middlewares
+app.use(cors({ origin: "*" })); // Replace "*" with your Vercel URL in production
 app.use(express.json());
 
+// Routes
 app.use("/api/transactions", transactionRoutes);
-app.use("/api/accounts", accountRoutes);
+
+// MongoDB connection
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || "your_mongo_connection_string_here";
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/money-manager")
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("MongoDB connected");
-    app.listen(5000, () =>
-      console.log("Server running on http://localhost:5000")
-    );
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
-  .catch(console.error);
+  .catch((err) => console.log(err));

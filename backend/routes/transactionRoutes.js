@@ -1,13 +1,19 @@
+// backend/routes/transactionRoutes.js
 import express from "express";
 import {
-  createTransaction,
   getTransactions,
+  getTransaction,
+  createTransaction,
+  updateTransaction,
+  deleteTransaction,
 } from "../controllers/transactionsController.js";
 
 const router = express.Router();
 
-router.get("/", getTransactions);
-router.post("/", createTransaction);
-router.put("/:id", updateTransaction);
+router.get("/", getTransactions);           // GET /api/transactions
+router.get("/:id", getTransaction);         // GET /api/transactions/:id
+router.post("/", createTransaction);        // POST /api/transactions
+router.put("/:id", updateTransaction);      // PUT /api/transactions/:id
+router.delete("/:id", deleteTransaction);   // DELETE /api/transactions/:id
 
 export default router;
